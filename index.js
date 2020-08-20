@@ -70,9 +70,9 @@ const entries = function*(prefix = EMPTY_STRING,
     const entireKey = prefix + key;
 
     // already end of a word, so let's add it
-    if (trie.value !== null || (trie.store.size === 0 && trie.hash !== null)) {
+    if (trie.value !== null) {
       if (useKey && useValue && useHash) {
-        yield [entireKey, trie.value, trie.hash];
+        yield [entireKey, trie.value, null];
       }else if (useKey && useValue) {
         yield [entireKey, trie.value];
       } else if (useKey) {
@@ -80,6 +80,9 @@ const entries = function*(prefix = EMPTY_STRING,
       } else if (useValue) {
         yield trie.value;
       }
+    }
+    if(useKey && useValue && useHash && (trie.value === null && (trie.store.size === 0 && trie.hash !== null))){
+      yield [entireKey, null, trie.hash];
     }
 
     // get all possible results of child nodes

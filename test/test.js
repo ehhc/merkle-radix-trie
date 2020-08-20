@@ -342,9 +342,9 @@ describe("Radix Trie", () => {
       for (const entry of trie.entriesWithHashs()) {
         entryArray.push(entry);
       }
-      assert.deepEqual(entryArray[0], ['bar', 15, 'ad3a49ec656f4a2fda4b11110252327f57bcc45fe588f71ed535c168f7ef5234']);
-      assert.deepEqual(entryArray[1], ['barstool', 42, '22e3303723319c7c91155563f6dcbc6b9808fbd072aabf522e90700220a41516']);
-      assert.deepEqual(entryArray[2], ['bao', 10, '859365b2e0f586f0186b557afe8789974f4519dd752b0355873910b5691caa19']);
+      assert.deepEqual(entryArray[0], ['bar', 15, null]);
+      assert.deepEqual(entryArray[1], ['barstool', 42, null]);
+      assert.deepEqual(entryArray[2], ['bao', 10, null]);
     })
 
     it("should also be shown in entriesWithHashs() even when branches where removed", () => {
@@ -358,7 +358,7 @@ describe("Radix Trie", () => {
         entryArray.push(entry);
       }
       assert.deepEqual(entryArray[0], ['bar', null, 'ad3a49ec656f4a2fda4b11110252327f57bcc45fe588f71ed535c168f7ef5234']);
-      assert.deepEqual(entryArray[1], ['bao', 10, '859365b2e0f586f0186b557afe8789974f4519dd752b0355873910b5691caa19']);
+      assert.deepEqual(entryArray[1], ['bao', 10, null]);
     })
 
   });
