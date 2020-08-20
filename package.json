@@ -1,7 +1,7 @@
 {
-  "name": "radix-trie-js",
+  "name": "merkle-radix-trie",
   "version": "1.0.5",
-  "description": "Radix Trie in Javascript",
+  "description": "Merkle Radix Trie in Javascript",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/mocha/bin/mocha",
