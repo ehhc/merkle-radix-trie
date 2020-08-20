@@ -183,6 +183,7 @@ Triggers the recalculation of the hashes of all nodes. The hash will be calculat
 - if the node has children: `Node.hash = SHA256('' + childNode[0].hash + childNode[1].hash + .. + childNode[n].hash)`
 ```js
 const trie = new RadixTrie().add("bar", 15).add("bao", 10).add("barstool", 42);
+trie.calculateHash();
 
 thisObj.hash;
 // c5d5a515a129b2d7dcc9451a62d8839c004b6be921b77e469f66a53ec9bd1bc1
