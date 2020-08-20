@@ -332,6 +332,35 @@ describe("Radix Trie", () => {
       assert.equal(trie.getTrie("bar").store.size, 0);
       assert.equal(trie.getTrie("bar").value, null);
     })
+
+    it("should also be shown in entriesWithHashs()", () => {
+      const trie = new Trie().add("bar", 15).add("bao", 10).add("barstool", 42);
+      trie.calculateHash();
+      assert.equal(trie.hash, "c5d5a515a129b2d7dcc9451a62d8839c004b6be921b77e469f66a53ec9bd1bc1");
+
+      let entryArray = [];
+      for (const entry of trie.entriesWithHashs()) {
+        entryArray.push(entry);
+      }
+      assert.deepEqual(entryArray[0], ['bar', 15, 'ad3a49ec656f4a2fda4b11110252327f57bcc45fe588f71ed535c168f7ef5234']);
+      assert.deepEqual(entryArray[1], ['barstool', 42, '22e3303723319c7c91155563f6dcbc6b9808fbd072aabf522e90700220a41516']);
+      assert.deepEqual(entryArray[2], ['bao', 10, '859365b2e0f586f0186b557afe8789974f4519dd752b0355873910b5691caa19']);
+    })
+
+    it("should also be shown in entriesWithHashs() even when branches where removed", () => {
+      const trie = new Trie().add("bar", 15).add("bao", 10).add("barstool", 42);
+      trie.calculateHash();
+      assert.equal(trie.hash, "c5d5a515a129b2d7dcc9451a62d8839c004b6be921b77e469f66a53ec9bd1bc1");
+      trie.deleteBranch("bar");
+
+      let entryArray = [];
+      for (const entry of trie.entriesWithHashs()) {
+        entryArray.push(entry);
+      }
+      assert.deepEqual(entryArray[0], ['bar', null, 'ad3a49ec656f4a2fda4b11110252327f57bcc45fe588f71ed535c168f7ef5234']);
+      assert.deepEqual(entryArray[1], ['bao', 10, '859365b2e0f586f0186b557afe8789974f4519dd752b0355873910b5691caa19']);
+    })
+
   });
 
 });

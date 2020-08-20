@@ -64,13 +64,16 @@ const canIterate = (value) => {
 // used outside of class definition to make function signature part of private api
 const entries = function*(prefix = EMPTY_STRING,
                           useKey = true,
-                          useValue = true) {
+                          useValue = true,
+                          useHash = false) {
   for (let [key, trie] of this.store) {
     const entireKey = prefix + key;
 
     // already end of a word, so let's add it
-    if (trie.value !== null) {
-      if (useKey && useValue) {
+    if (trie.value !== null || (trie.store.size === 0 && trie.hash !== null)) {
+      if (useKey && useValue && useHash) {
+        yield [entireKey, trie.value, trie.hash];
+      }else if (useKey && useValue) {
         yield [entireKey, trie.value];
       } else if (useKey) {
         yield entireKey;
@@ -80,7 +83,7 @@ const entries = function*(prefix = EMPTY_STRING,
     }
 
     // get all possible results of child nodes
-    yield* entries.call(trie, entireKey, useKey, useValue);
+    yield* entries.call(trie, entireKey, useKey, useValue, useHash);
   }
 };
 
@@ -290,6 +293,10 @@ class Trie {
     yield* entries.call(this, EMPTY_STRING, false, true);
   }
 
+  *entriesWithHashs(){
+    yield* entries.call(this, EMPTY_STRING, true, true, true);
+  }
+
   calculateHash(parentKey = '') {
     if(this.value || (this.store && this.store.size > 0)){
       this.hash = '';
@@ -316,8 +323,10 @@ class Trie {
 
   deleteBranch(key) {
     let trie = this.getTrie(key);
-    trie.value = null;
-    trie.store = new Map();
+    if(trie != null) {
+      trie.value = null;
+      trie.store = new Map();
+    }
   }
 
 };
