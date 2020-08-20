@@ -1,4 +1,8 @@
 "use strict";
+const hashFunction = require("crypto").createHash("sha256");
+const calcHash = function(object) {
+  return hashFunction.copy().update(""+ object).digest('hex');
+}
 
 const BREAK = "TRIE_BREAK_REDUCE";
 const EMPTY_STRING = "";
@@ -277,6 +281,28 @@ class Trie {
   *values() {
     yield* entries.call(this, EMPTY_STRING, false, true);
   }
+
+  calculateHash(parentKey = '') {
+    if(this.value) {
+      this.hash = calcHash(parentKey + calcHash(this.value));
+    }
+    if(this.store && this.store.size > 0) {
+      let childHashes = '';
+      let childKeys = Array.from(this.store.keys());
+      childKeys.sort();
+      for(let childKey of childKeys) {
+        childHashes += this.store.get(childKey).calculateHash(parentKey + childKey);
+      }
+      if(this.hash) {
+        this.hash = calcHash(this.hash + childHashes);
+      } else {
+        this.hash = calcHash(childHashes);
+      }
+    }
+
+    return this.hash;
+  }
+
 };
 
 module.exports = Trie;

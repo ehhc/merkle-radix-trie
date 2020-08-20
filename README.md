@@ -1,17 +1,15 @@
-# Radix Trie (in Javascript)
-[![Build Status](https://travis-ci.org/scttdavs/radix-trie.svg?branch=master)](https://travis-ci.org/scttdavs/radix-trie)
-[![Coverage Status](https://coveralls.io/repos/github/scttdavs/radix-trie/badge.svg?branch=master)](https://coveralls.io/github/scttdavs/radix-trie?branch=master)
-[![NPM](https://img.shields.io/npm/v/radix-trie-js.svg)](https://www.npmjs.com/package/radix-trie-js)
+# Merkle Radix Trie (in Javascript)
+Note: Currently only works for nodejs because it relies on package 'crypto' of nodejs.
 
 ## Usage
 
 Install from NPM:
 ```sh
-npm i radix-trie-js
+npm i https://github.com/ehhc/merkle-radix-trie
 ```
 
 ```js
-const RadixTrie = require("radix-trie-js");
+const RadixTrie = require("merkle-radix-trie");
 // create a trie with the key of foo and value of 5
 const trie = new RadixTrie().add("foo", 5);
 ```
@@ -178,4 +176,14 @@ thisObj.bar;
 // 15
 thisObj.barstool;
 // false
+```
+### calculateHash
+Triggers the recalculation of the hashes of all nodes. The hash will be calculated as follows:
+- If the node is a leave: `Node.hash = SHA256('' + node.key + node.value)`
+- if the node has children: `Node.hash = SHA256('' + childNode[0].hash + childNode[1].hash + .. + childNode[n].hash)`
+```js
+const trie = new RadixTrie().add("bar", 15).add("bao", 10).add("barstool", 42);
+
+thisObj.hash;
+// c5d5a515a129b2d7dcc9451a62d8839c004b6be921b77e469f66a53ec9bd1bc1
 ```

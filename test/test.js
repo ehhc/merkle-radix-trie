@@ -294,4 +294,20 @@ describe("Radix Trie", () => {
       assert.deepEqual(returnedKeys, ["b", "bar", "barstool"]);
     });
   });
+
+  describe("hash", () => {
+    it("calculates the correct hash value when calculateHash is called (if branches don't have values)", () => {
+      const trie = new Trie().add("bao", 10).add("barstool", 42);
+      trie.calculateHash();
+      assert.equal(trie.hash, "22d18a2b318c31b2fcc39cce93a13fff55964496243585f2aeebbe6cc39e45dd");
+    })
+
+    it("calculates the correct hash value when calculateHash is called", () => {
+      const trie = new Trie().add("bar", 15).add("bao", 10).add("barstool", 42);
+      trie.calculateHash();
+
+      assert.equal(trie.hash, "c5d5a515a129b2d7dcc9451a62d8839c004b6be921b77e469f66a53ec9bd1bc1");
+    })
+  });
+
 });
