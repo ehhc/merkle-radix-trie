@@ -235,9 +235,17 @@ class Trie {
   }
 
   get(key) {
+    let trie = this.getTrie(key);
+    if(trie != null) {
+      return trie.value;
+    }
+    return trie;
+  }
+
+  getTrie(key) {
     // if the key exists already, return it
     if (this.store.has(key)) {
-      return this.store.get(key).value;
+      return this.store.get(key);
     }
 
     let getIndex;
@@ -253,7 +261,7 @@ class Trie {
     }, EMPTY_STRING);
 
     if (this.store.has(getKey)) {
-      return this.store.get(getKey).get(key.slice(getIndex));
+      return this.store.get(getKey).getTrie(key.slice(getIndex));
     } else {
       // no matches
       return null;
@@ -283,6 +291,9 @@ class Trie {
   }
 
   calculateHash(parentKey = '') {
+    if(this.value || (this.store && this.store.size > 0)){
+      this.hash = '';
+    }
     if(this.value) {
       this.hash = calcHash(parentKey + calcHash(this.value));
     }
@@ -301,6 +312,12 @@ class Trie {
     }
 
     return this.hash;
+  }
+
+  deleteBranch(key) {
+    let trie = this.getTrie(key);
+    trie.value = null;
+    trie.store = new Map();
   }
 
 };

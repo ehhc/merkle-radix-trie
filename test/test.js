@@ -295,18 +295,42 @@ describe("Radix Trie", () => {
     });
   });
 
-  describe("hash", () => {
-    it("calculates the correct hash value when calculateHash is called (if branches don't have values)", () => {
+  describe("calculateHash", () => {
+    it("should work properly (if branches don't have values)", () => {
       const trie = new Trie().add("bao", 10).add("barstool", 42);
       trie.calculateHash();
       assert.equal(trie.hash, "22d18a2b318c31b2fcc39cce93a13fff55964496243585f2aeebbe6cc39e45dd");
     })
 
-    it("calculates the correct hash value when calculateHash is called", () => {
+    it("should work properly (if a branch has a value)", () => {
       const trie = new Trie().add("bar", 15).add("bao", 10).add("barstool", 42);
       trie.calculateHash();
 
       assert.equal(trie.hash, "c5d5a515a129b2d7dcc9451a62d8839c004b6be921b77e469f66a53ec9bd1bc1");
+    })
+
+    it("should don't get confused if called multiple times", () => {
+      const trie = new Trie().add("bar", 15).add("bao", 10).add("barstool", 42);
+      trie.calculateHash();
+      trie.calculateHash();
+
+      assert.equal(trie.hash, "c5d5a515a129b2d7dcc9451a62d8839c004b6be921b77e469f66a53ec9bd1bc1");
+    })
+
+    it("should not change the hash if a branche-node is deleted", () => {
+      const trie = new Trie().add("bar", 15).add("bao", 10).add("barstool", 42);
+      trie.calculateHash();
+      trie.deleteBranch("bar");
+      assert.equal(trie.hash, "c5d5a515a129b2d7dcc9451a62d8839c004b6be921b77e469f66a53ec9bd1bc1");
+
+
+      trie.calculateHash()
+      assert.equal(trie.hash, "c5d5a515a129b2d7dcc9451a62d8839c004b6be921b77e469f66a53ec9bd1bc1");
+      assert.equal(trie.get("bao"), 10);
+      assert.equal(trie.get("barstool"), null);
+      assert.equal(trie.get("bar"), null);
+      assert.equal(trie.getTrie("bar").store.size, 0);
+      assert.equal(trie.getTrie("bar").value, null);
     })
   });
 
