@@ -1,6 +1,6 @@
 {
   "name": "merkle-radix-trie",
-  "version": "1.0.5",
+  "version": "1.0.5-fix1",
   "description": "Merkle Radix Trie in Javascript",
   "main": "index.js",
   "scripts": {

@@ -2,8 +2,6 @@
 
 const assert = require("assert");
 const Trie = require("../");
-const util = require("util");
-// ex. console.log(util.inspect(trie, false, null));
 
 describe("Radix Trie", () => {
   describe("Add", () => {
@@ -359,6 +357,15 @@ describe("Radix Trie", () => {
       }
       assert.deepEqual(entryArray[0], ['bar', null, 'ad3a49ec656f4a2fda4b11110252327f57bcc45fe588f71ed535c168f7ef5234']);
       assert.deepEqual(entryArray[1], ['bao', 10, null]);
+    })
+
+    it("should also work if a value is 'false'", () => {
+      const trie = new Trie().add("bar", 15).add("foo", false).add("barstool", 42);
+      trie.calculateHash();
+      assert.equal(trie.hash, "85e95e688bc50a4c92889c017d6400adc4c34428b2b321212836a6e9b723ece8");
+      assert.equal(trie.getTrie("bar").hash, "ad3a49ec656f4a2fda4b11110252327f57bcc45fe588f71ed535c168f7ef5234");
+      assert.equal(trie.getTrie("barstool").hash, "22e3303723319c7c91155563f6dcbc6b9808fbd072aabf522e90700220a41516");
+      assert.equal(trie.getTrie("foo").hash, "f72a366e47e01ce651069a9232098ca16540ba97f5b8d6da3a852b115fd8ed63");
     })
 
   });

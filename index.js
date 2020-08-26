@@ -301,10 +301,10 @@ class Trie {
   }
 
   calculateHash(parentKey = '') {
-    if(this.value || (this.store && this.store.size > 0)){
+    if(this.value != null || (this.store && this.store.size > 0)){
       this.hash = '';
     }
-    if(this.value) {
+    if(this.value != null) {
       this.hash = calcHash(parentKey + calcHash(this.value));
     }
     if(this.store && this.store.size > 0) {
